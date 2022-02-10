@@ -1,0 +1,15 @@
+Decisions the cookiecutter backend option sqlalchemy has made for you
+
+When creating a project and selecting the backend option of sqlalchemy, the cookiecutter makes the following assumptions:
+
+    You are willing to use SQLite for persistent storage, although almost any SQL database could be used with SQLAlchemy.
+
+    You are willing to use SQLAlchemy for a database access tool.
+
+    You are willing to use Alembic for a database migrations tool.
+
+    You are willing to use a console script for a data loading tool.
+
+    You are willing to use URL dispatch to map URLs to code.
+
+    You want to use zope.sqlalchemy, pyramid_tm, and the transaction packages to scope sessions to requests.
