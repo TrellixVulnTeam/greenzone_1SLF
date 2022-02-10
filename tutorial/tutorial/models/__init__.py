@@ -3,20 +3,48 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import configure_mappers
 import zope.sqlalchemy
 
+
+""" import packages from other models to attach to metadata. """
+from .page import Page # flake8: noqa
+from .user import User # flake8: noqa
+
+
+"""
+models/__init__.py module defines the primary API I will use for configuring
+the db connections within my application.
+
+The purpose of the 'models.meta.metadata object is to describe the schema
+of the database. This is done by defining models that inherit from 'Base'
+objects attache to that metadata.object. to attach the 'models' table 
+defined in mymodel.py to the 'metadata', it must be imported. If this
+import doesn't happen 'sqlalchemy.schema.MetaData.create_all()' will
+not create the table, because the metadata object doesn't know about it.
+
+after importing all of the models, explictly execute the function
+'sqlalchemy.orm.confirgure_mappers()' to test model definition 
+before starting to create connections. 
+"""
+
 # Import or define all models here to ensure they are attached to the
 # ``Base.metadata`` prior to any initialization routines.
-from .mymodel import MyModel  # flake8: noqa
+# from .mymodel import MyModel  # flake8: noqa
 
 # Run ``configure_mappers`` after defining all of the models to ensure
 # all relationships can be setup.
 configure_mappers()
 
-
+# Create SQLAlchemy db engine using sqlalchemy.engine_from_config()
 def get_engine(settings, prefix='sqlalchemy.'):
     return engine_from_config(settings, prefix)
 
 
 def get_session_factory(engine):
+    """ 
+    get_session_factory accepts an SQLAlchemy db engine, 
+    creates session_factory from SQLAlchemy class 
+    'sqlalchemy.orm.session.sessionmaker' this session_factory
+    is then used for creating sessions bound to the db engine. 
+    """
     factory = sessionmaker()
     factory.configure(bind=engine)
     return factory

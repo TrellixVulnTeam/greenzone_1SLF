@@ -4,8 +4,30 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from .. import models
 
+""" The main function of a webframe work is mapping each URL pattern to a 
+    code (a view callable) that is executed when the requested URL matches
+    the corresponding route. This application uses the 'pyramid.view.view_config()'
+    decorator to perform this mapping. """
 
 @view_config(route_name='home', renderer='tutorial:templates/mytemplate.jinja2')
+""" This is the important part. The @view_config decorator associates the function
+    with a 'view configuration, consisting of:
+    a route_name == home
+    a renderer == a template from /templates of the package 
+    When a pattern associated with the home view is matched during a request, 
+    'my_view()' will be excuted. 'my_view()' returns a dict; renderer will use
+    'template/mytemplate.jinja2 to create a response based on values of the dict"""
+
+""" The purpose of __init__.py executing 'pyramid.config.Configurator.scan()'
+    method 'config.scan()' was to find and process @view_config decorator
+    in order to creae a view configuration within my app. @view_config is inert
+    without being detected by 'config.scan()' """
+
+""" the sample 'my_view()' created by cookiecutter uses 'try:' and 'except:'
+    clause to detect if there is a problem accessing the project database
+    and provide an alternate error response. This alt text can be found as the
+    output of 'db_err_msg' at the bottom of this file. """
+
 def my_view(request):
     try:
         query = request.dbsession.query(models.MyModel)
